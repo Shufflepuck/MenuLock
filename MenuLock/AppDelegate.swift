@@ -26,25 +26,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = statusBar
         
         // Setup global keyboard shortcut (CMD + L)
-        let keyMask: NSEventModifierFlags = .CommandKeyMask
-        let keyCode = UInt(0x25)
+        let keyMask: NSEventModifierFlags = .FunctionKeyMask //[ .AlternateKeyMask, .ShiftKeyMask]
+        let keyCode = UInt(0x6F)
         
         let shortcut = MASShortcut(keyCode: keyCode, modifierFlags: keyMask.rawValue)
-        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut, withAction: lockComputer)
+        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut, withAction: screenSleep)
     }
     
     @IBAction func statusItemQuit(sender: NSMenuItem) {
         NSApplication.sharedApplication().terminate(self)
     }
 
-    func lockComputer() {
+    func screenSleep() -> Void {
         let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
         let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle", true)
         IOObjectRelease(registry)
     }
     
+    func lockScreenImmediate() -> Void {
+        // Note: Private -- Do not use!
+        // http://stackoverflow.com/questions/34669958/swift-how-to-call-a-c-function-loaded-from-a-dylib
+        
+        let libHandle = dlopen("/System/Library/PrivateFrameworks/login.framework/Versions/Current/login", RTLD_LAZY)
+        let sym = dlsym(libHandle, "SACLockScreenImmediate")
+        typealias myFunction = @convention(c) Void -> Void
+        let SACLockScreenImmediate = unsafeBitCast(sym, myFunction.self)
+        SACLockScreenImmediate()
+    }
+    
     @IBAction func statusItemLock(sender: NSMenuItem) {
-        lockComputer()
+        screenSleep()
     }
 
 }
