@@ -1,9 +1,17 @@
 # MenuLock
 implements CMD+L for windows enthusiasts
+To be more precise, it puts display to sleep. 
+
+To lock your computer, you need to have `System Preferences > Security & Privacy > Require the password Immediately after sleep saver begins`, and a password set.
 
 ![example](https://raw.githubusercontent.com/ftiff/MenuLock/master/Screen.Shot.2016-02-29.at.18.43.52.png)
 
 (Hi, Cédric!)
+
+# Why ? 
+- Because Keychain Access' menubar introduce the question: "Why lock keychain?"
+- Because ctrl+shift+power/eject can become halt or reboot if user is not careful
+- Because Hot Corners are not loved by everyone (and they only start screensaver)
 
 # Some details
 
