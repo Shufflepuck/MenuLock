@@ -7,21 +7,45 @@
 //
 
 import Cocoa
+import MASShortcut
+
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
+    @IBOutlet weak var statusBar: NSMenu!
 
-
+    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSSquareStatusItemLength)
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
+        
+        // Setup icon
+        let icon = NSImage(named: NSImageNameLockLockedTemplate)
+        statusItem.image = icon
+        statusItem.menu = statusBar
+        
+        // Setup global keyboard shortcut (CMD + L)
+        let keyMask: NSEventModifierFlags = .CommandKeyMask
+        let keyCode = UInt(0x25)
+        
+        let shortcut = MASShortcut(keyCode: keyCode, modifierFlags: keyMask.rawValue)
+        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut, withAction: lockComputer)
+    }
+    
+    @IBAction func statusItemQuit(sender: NSMenuItem) {
+        NSApplication.sharedApplication().terminate(self)
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+    func lockComputer() {
+        let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
+        let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle", true)
+        IOObjectRelease(registry)
     }
-
+    
+    @IBAction func statusItemLock(sender: NSMenuItem) {
+        lockComputer()
+    }
 
 }
 
