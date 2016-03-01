@@ -15,6 +15,8 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MenuLock" customModuleProvider="target">
             <connections>
                 <outlet property="statusBar" destination="lh2-MN-IsP" id="mck-qp-JB3"/>
+                <outlet property="statusLockScreen" destination="5gu-WM-qBQ" id="wPe-25-LnH"/>
+                <outlet property="statusUsePrivate" destination="l4J-bC-PYl" id="KTM-vU-S3i"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -669,9 +671,15 @@
         </menu>
         <menu id="lh2-MN-IsP">
             <items>
-                <menuItem title="Lock Screen" keyEquivalent="l" id="5gu-WM-qBQ">
+                <menuItem title="Lock Screen" keyEquivalent="" id="5gu-WM-qBQ">
                     <connections>
                         <action selector="statusItemLock:" target="Voe-Tx-rLC" id="Sjm-oW-0gD"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Use Private Framework" id="l4J-bC-PYl">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="usePrivateFramework:" target="Voe-Tx-rLC" id="N1A-ec-5C5"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="iMU-mG-QDG"/>

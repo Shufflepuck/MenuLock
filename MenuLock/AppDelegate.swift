@@ -13,8 +13,10 @@ import MASShortcut
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    @IBOutlet weak var statusUsePrivate: NSMenuItem!
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var statusBar: NSMenu!
+    @IBOutlet weak var statusLockScreen: NSMenuItem!
 
     let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSSquareStatusItemLength)
     
@@ -25,18 +27,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.image = icon
         statusItem.menu = statusBar
         
-        // Setup global keyboard shortcut (CMD + L)
-        let keyMask: NSEventModifierFlags = .FunctionKeyMask //[ .AlternateKeyMask, .ShiftKeyMask]
-        let keyCode = UInt(0x6F)
+        //statusLockScreen.keyEquivalent = String("%c", NSF12FunctionKey)
+        //statusLockScreen.keyEquivalentModifierMask = (NSEventModifierFlags.FunctionKeyMask.rawValue as! Int)
         
+        // Setup global keyboard shortcut (CMD + F12)
+        let keyMask: NSEventModifierFlags = [.CommandKeyMask ]//[ .AlternateKeyMask, .ShiftKeyMask]
+        let keyCode = UInt(0x6F)
         let shortcut = MASShortcut(keyCode: keyCode, modifierFlags: keyMask.rawValue)
-        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut, withAction: screenSleep)
+        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut, withAction: lockHandler)
+        
+        // Setup global keyboard shortcut (fn + F12)
+        let keyMask2: NSEventModifierFlags = [ .FunctionKeyMask ]//[ .AlternateKeyMask, .ShiftKeyMask]
+        let keyCode2 = UInt(0x6F)
+        let shortcut2 = MASShortcut(keyCode: keyCode2, modifierFlags: keyMask2.rawValue)
+        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut2, withAction: lockHandler)
     }
     
     @IBAction func statusItemQuit(sender: NSMenuItem) {
         NSApplication.sharedApplication().terminate(self)
     }
 
+    func lockHandler() -> Void {
+        if statusUsePrivate.state == 1 {
+            lockScreenImmediate()
+        } else {
+            screenSleep()
+        }
+    }
+    
     func screenSleep() -> Void {
         let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
         let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle", true)
@@ -55,8 +73,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func statusItemLock(sender: NSMenuItem) {
-        screenSleep()
+        lockHandler()
     }
 
+    @IBAction func usePrivateFramework(sender: NSMenuItem) {
+        if sender.state == 1 {
+            sender.state = 0
+        } else {
+            sender.state = 1
+        }
+    }
 }
 
