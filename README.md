@@ -15,6 +15,18 @@ To lock your computer, you need to have `System Preferences > Security & Privacy
 
 # Some details
 
+## Building the App
+
+This app uses [Cocoapods](https://cocoapods.org). Please first install it (usually with `sudo gem install cocoapods`).
+Then follow this:
+
+- `git clone https://github.com/ftiff/MenuLock.git`
+- `cd MenuLock`
+- `pod install`
+- `open MenuLock.xcworkspace/`
+
+Then go to `Product > Scheme > Edit Scheme…` and make sure `Run > Executable` is set to "MenuLock.app".
+
 ## Key Modifiers
 
 `let keyMask: NSEventModifierFlags = [ .AlternateKeyMask, .ShiftKeyMask]`
