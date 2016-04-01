@@ -17,6 +17,7 @@ To lock your computer, you need to have `System Preferences > Security & Privacy
 
 ## Building the App
 
+### Workspace Setup
 This app uses [Cocoapods](https://cocoapods.org). Please first install it (usually with `sudo gem install cocoapods`).
 Then follow this:
 
@@ -26,6 +27,15 @@ Then follow this:
 - `open MenuLock.xcworkspace/`
 
 Then go to `Product > Scheme > Edit Scheme…` and make sure `Run > Executable` is set to "MenuLock.app".
+
+### Build
+- Modify APP_VERSION in Build Settings (see https://ftiff.wordpress.com/2016/04/01/xcode-automatically-sign-and-build-package/)
+- In Terminal.app, navigate to the MenuLock directory
+- `xcodebuild -workspace MenuLock.xcworkspace -scheme MenuLock install`
+
+### install
+- `sudo installer -target / -pkg /tmp/MenuLock-1.1.pkg`
+- `sudo launchctl load /Library/LaunchAgents/io.fti.MenuLock.plist`
 
 ## Key Modifiers
 

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		087A334C1CAEBF720098E96A /* io.fti.MenuLock.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 089D367A1CAEBEDB0040D280 /* io.fti.MenuLock.plist */; };
-		087A334E1CAEC1DC0098E96A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 087A334D1CAEC1DC0098E96A /* README.md */; };
+		087A33501CAEC3EC0098E96A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 087A334F1CAEC3EC0098E96A /* README.md */; };
 		4768F0E51C84910E0069C875 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4768F0E41C84910E0069C875 /* AppDelegate.swift */; };
 		4768F0E71C84910E0069C875 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4768F0E61C84910E0069C875 /* Assets.xcassets */; };
 		4768F0EA1C84910E0069C875 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4768F0E81C84910E0069C875 /* MainMenu.xib */; };
@@ -29,7 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		087A334D1CAEC1DC0098E96A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = MenuLock/README.md; sourceTree = "<group>"; };
+		087A334F1CAEC3EC0098E96A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		089D367A1CAEBEDB0040D280 /* io.fti.MenuLock.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = io.fti.MenuLock.plist; sourceTree = "<group>"; };
 		45C6C2BA52AB40A78A9F0628 /* Pods-MenuLock.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MenuLock.release.xcconfig"; path = "Pods/Target Support Files/Pods-MenuLock/Pods-MenuLock.release.xcconfig"; sourceTree = "<group>"; };
 		4768F0E11C84910E0069C875 /* MenuLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,7 +65,7 @@
 		4768F0D81C84910E0069C875 = {
 			isa = PBXGroup;
 			children = (
-				087A334D1CAEC1DC0098E96A /* README.md */,
+				087A334F1CAEC3EC0098E96A /* README.md */,
 				4768F0E31C84910E0069C875 /* MenuLock */,
 				4768F0E21C84910E0069C875 /* Products */,
 				3E8A9345C4481B2A7E9CC7BE /* Pods */,
@@ -239,7 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				087A334E1CAEC1DC0098E96A /* README.md in Sources */,
+				087A33501CAEC3EC0098E96A /* README.md in Sources */,
 				4768F0E51C84910E0069C875 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
