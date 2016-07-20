@@ -13,47 +13,109 @@ import MASShortcut
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var statusUsePrivate: NSMenuItem!
-    @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var statusBar: NSMenu!
     @IBOutlet weak var statusLockScreen: NSMenuItem!
 
-    let statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(NSSquareStatusItemLength)
+    @IBOutlet weak var activeKeyMenu: NSMenu!
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    let statusItem = NSStatusBar.system().statusItem(withLength: NSSquareStatusItemLength)
+    var activeKey: Key = Key(name: "CMD + L", keyCode: 0x25, keyMask: [ .command ], keyEquivalent: "l")
+    
+    
+    // List of available Keys
+    
+    var keyMaps = [
+    Key(name: "F19", keyCode: 80, keyMask: [], keyEquivalent: NSF19FunctionKey),
+    Key(name: "CMD + F12", keyCode: 0x6F, keyMask: [ .command ], keyEquivalent: NSF12FunctionKey),
+    Key(name: "CMD + L", keyCode: 0x25, keyMask: [ .command ], keyEquivalent: "l"),
+    Key(name: "CMD + K", keyCode: 0x28, keyMask: [ .command ], keyEquivalent: "k")
+    ]
+    
+    @IBAction func statusItemQuit(sender: NSMenuItem) {
+        NSApplication.shared().terminate(self)
+    }
+    
+    @IBAction func statusItemLock(sender: NSMenuItem) {
+        screenSleep()
+    }
+
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
         
         // Setup icon
+        
         let icon = NSImage(named: NSImageNameLockLockedTemplate)
         statusItem.image = icon
         statusItem.menu = statusBar
         
-        //statusLockScreen.keyEquivalent = String("%c", NSF12FunctionKey)
-        //statusLockScreen.keyEquivalentModifierMask = (NSEventModifierFlags.FunctionKeyMask.rawValue as! Int)
         
-        // Setup global keyboard shortcut (CMD + F12)
-        let keyMask: NSEventModifierFlags = [.CommandKeyMask ]//[ .AlternateKeyMask, .ShiftKeyMask]
-        let keyCode = UInt(0x6F)
-        let shortcut = MASShortcut(keyCode: keyCode, modifierFlags: keyMask.rawValue)
-        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut, withAction: lockHandler)
+        // Defaults
         
-        // Setup global keyboard shortcut (fn + F12)
-        let keyMask2: NSEventModifierFlags = [ .FunctionKeyMask ]//[ .AlternateKeyMask, .ShiftKeyMask]
-        let keyCode2 = UInt(0x6F)
-        let shortcut2 = MASShortcut(keyCode: keyCode2, modifierFlags: keyMask2.rawValue)
-        MASShortcutMonitor.sharedMonitor().registerShortcut(shortcut2, withAction: lockHandler)
+        setGlobalShortcut()
+        
+        
+        // Setup Active Key Menu
+        
+        for key in keyMaps {
+            let menuItem = NSMenuItem()
+            menuItem.title = key.name
+            if activeKey.name == key.name {
+                menuItem.state = NSOnState
+            }
+            menuItem.representedObject = key
+            menuItem.action = #selector(setActiveKey(sender:))
+            activeKeyMenu.addItem(menuItem)
+        }
+        
     }
     
-    @IBAction func statusItemQuit(sender: NSMenuItem) {
-        NSApplication.sharedApplication().terminate(self)
-    }
-
-    func lockHandler() -> Void {
-        if statusUsePrivate.state == 1 {
-            lockScreenImmediate()
+    
+    func setGlobalShortcut() {
+        
+        if let key: Key = readPrefs() {
+            activeKey = key
         } else {
-            screenSleep()
+            NSLog("Cannot get activeKey from UserDefaults. Setting current key.")
+            savePrefs(key: activeKey)
         }
+        
+        // Set Menu Item Key Equivalent
+        statusLockScreen.keyEquivalent = activeKey.keyEquivalent
+        statusLockScreen.keyEquivalentModifierMask = activeKey.keyMask
+        
+        // Setup Global Shortcut
+        let shortcut = MASShortcut(keyCode: activeKey.keyCode, modifierFlags: activeKey.keyMask.rawValue)
+        MASShortcutMonitor.shared().register(shortcut, withAction: screenSleep)
+        
+
     }
+    
+    
+    // Set which key should trigger the sleep
+    
+    func setActiveKey(sender: NSMenuItem) {
+        
+        for menuItem in activeKeyMenu.items {
+            menuItem.state = NSOffState
+        }
+        sender.state = NSOnState
+        if let key: Key = (sender.representedObject as! Key) {
+            savePrefs(key: key)
+            
+            //activeKey = key
+        } else {
+            NSLog("cannot see representedObject")
+        }
+        setGlobalShortcut()
+    }
+    
+
+    
+
+    
+    
+    
+    // Sleep Screen methods
     
     func screenSleep() -> Void {
         let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
@@ -67,21 +129,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let libHandle = dlopen("/System/Library/PrivateFrameworks/login.framework/Versions/Current/login", RTLD_LAZY)
         let sym = dlsym(libHandle, "SACLockScreenImmediate")
-        typealias myFunction = @convention(c) Void -> Void
-        let SACLockScreenImmediate = unsafeBitCast(sym, myFunction.self)
+        typealias myFunction = @convention(c) (Void) -> Void
+        let SACLockScreenImmediate = unsafeBitCast(sym, to: myFunction.self)
         SACLockScreenImmediate()
     }
     
-    @IBAction func statusItemLock(sender: NSMenuItem) {
-        lockHandler()
+    
+    
+    // Preferences 
+    
+    func savePrefs(key: Key) {
+        let prefs = UserDefaults()
+        let data = NSKeyedArchiver.archivedData(withRootObject: key)
+        prefs.set(data, forKey: "currentKey")
+        prefs.synchronize()
     }
-
-    @IBAction func usePrivateFramework(sender: NSMenuItem) {
-        if sender.state == 1 {
-            sender.state = 0
+    
+    func readPrefs() -> Key? {
+        let prefs = UserDefaults()
+        if let object = prefs.object(forKey: "currentKey") {
+            if let data = object as? Data {
+                return NSKeyedUnarchiver.unarchiveObject(with: data as Data) as? Key
+            } else {
+                NSLog("cannot convert to Data")
+                return nil
+            }
         } else {
-            sender.state = 1
+            return nil
         }
     }
+
 }
 
