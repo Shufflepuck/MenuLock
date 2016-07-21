@@ -123,7 +123,7 @@
 						DevelopmentTeam = EM3ER8T33A;
 						DevelopmentTeamName = "Francois TIFFREAU";
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 0;
@@ -319,13 +319,15 @@
 			baseConfigurationReference = 0E392E529B6CA297CE7ABE66 /* Pods-MenuLock.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MenuLock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = io.fti.MenuLock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "23912fcf-afa1-45df-88f8-0b8935d4a7fd";
+				PROVISIONING_PROFILE_SPECIFIER = "EM3ER8T33A/MenuLock 20160720";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -335,13 +337,15 @@
 			baseConfigurationReference = A7628FF9B155D1AC48E9C276 /* Pods-MenuLock.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MenuLock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = io.fti.MenuLock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "23912fcf-afa1-45df-88f8-0b8935d4a7fd";
+				PROVISIONING_PROFILE_SPECIFIER = "EM3ER8T33A/MenuLock 20160720";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 3.0;
 			};
@@ -372,4 +376,3 @@
 	};
 	rootObject = 4768F0D91C84910E0069C875 /* Project object */;
 }
-
