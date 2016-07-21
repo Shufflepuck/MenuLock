@@ -4,7 +4,7 @@ To be more precise, it puts display to sleep.
 
 To lock your computer, you need to have `System Preferences > Security & Privacy > Require the password Immediately after sleep saver begins`, and a password set.
 
-![example](https://raw.githubusercontent.com/ftiff/MenuLock/master/Screen.Shot.2016-02-29.at.18.43.52.png)
+![example](https://raw.githubusercontent.com/ftiff/MenuLock/master/MenuLock-v2.0.png)
 
 (Hi, Cédric!)
 
