@@ -36,7 +36,7 @@ class Key: NSObject, NSCoding {
             else { return nil }
         
         let keyMaskFlags = NSEventModifierFlags(rawValue: keyMask)
-        self.init(name: name, keyCode: keyCode, keyMask: keyMaskFlags, keyEquivalent: keyEquivalent)
+        self.init(name: name, keyCode: keyCode, keyMask: keyMaskFlags, keyEquivalent: keyEquivalent as AnyObject)
 
     }
 

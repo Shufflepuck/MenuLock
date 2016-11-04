@@ -19,16 +19,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var activeKeyMenu: NSMenu!
     
     let statusItem = NSStatusBar.system().statusItem(withLength: NSSquareStatusItemLength)
-    var activeKey: Key = Key(name: "CMD + L", keyCode: 0x25, keyMask: [ .command ], keyEquivalent: "l")
+    var activeKey: Key = Key(name: "CMD + L", keyCode: 0x25, keyMask: [ .command ], keyEquivalent: "l" as AnyObject)
     
     
     // List of available Keys
     
     var keyMaps = [
-    Key(name: "F19", keyCode: 80, keyMask: [], keyEquivalent: NSF19FunctionKey),
-    Key(name: "CMD + F12", keyCode: 0x6F, keyMask: [ .command ], keyEquivalent: NSF12FunctionKey),
-    Key(name: "CMD + L", keyCode: 0x25, keyMask: [ .command ], keyEquivalent: "l"),
-    Key(name: "CMD + K", keyCode: 0x28, keyMask: [ .command ], keyEquivalent: "k")
+    Key(name: "F19", keyCode: 80, keyMask: [], keyEquivalent: NSF19FunctionKey as AnyObject),
+    Key(name: "CMD + F12", keyCode: 0x6F, keyMask: [ .command ], keyEquivalent: NSF12FunctionKey as AnyObject),
+    Key(name: "CMD + L", keyCode: 0x25, keyMask: [ .command ], keyEquivalent: "l" as AnyObject),
+    Key(name: "CMD + K", keyCode: 0x28, keyMask: [ .command ], keyEquivalent: "k" as AnyObject)
     ]
     
     @IBAction func statusItemQuit(sender: NSMenuItem) {
@@ -99,7 +99,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             menuItem.state = NSOffState
         }
         sender.state = NSOnState
-        if let key: Key = (sender.representedObject as! Key) {
+        if let key: Key = (sender.representedObject as? Key) {
             savePrefs(key: key)
             
             //activeKey = key
@@ -119,7 +119,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func screenSleep() -> Void {
         let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
-        let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle", true)
+        let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle" as CFString!, true as CFTypeRef!)
         IOObjectRelease(registry)
     }
     
